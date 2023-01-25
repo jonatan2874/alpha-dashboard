@@ -12,7 +12,7 @@ import {
 const Register = () => {
   const [showPassword,setShowPassword] = useState(false);
   return (
-    <>
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="bg-secondary-100 p-8 rounded-xl shadow-xl" >
       <h1 className="text-3xl text-center font-bold tracking-[5px] text-white mb-8 w-auto lg:w-[450px]">Crear cuenta</h1>
       <form className="mb-8">
@@ -95,11 +95,11 @@ const Register = () => {
         <span className="flex items-center justify-center gap-2">
           ¿Ya tienes cuenta?
           <Link 
-            to="/auth" 
+            to="/login" 
             className="text-primary/80 hover:text-gray-100 transition-colors" > Ingresa </Link>
         </span>
     </div>
-    </>
+    </div>
   )
 }
 
