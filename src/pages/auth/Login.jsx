@@ -1,5 +1,6 @@
-import React,{useState} from 'react';
-import { Link } from 'react-router-dom';
+import React,{useContext, useState} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/auth';
 //icons
 import {
           RiMailLine, 
@@ -9,8 +10,19 @@ import {
         } from "react-icons/ri"
 
 const Login = () => {
-  
+
+  const { login } = useContext(AuthContext);
   const [showPassword,setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const onLogin = ()=>{
+    login('jonatan');
+    navigate('/',{
+      replace : true
+    }
+
+    );  
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -52,7 +64,9 @@ const Login = () => {
           <div>
             <button 
               type="submit" 
-              className="bg-primary text-black w-full py-3 px-4 rounded-lg hover:text-gray-100 transition-colors uppercase ">
+              className="bg-primary text-black w-full py-3 px-4 rounded-lg hover:text-gray-100 transition-colors uppercase "
+              onClick={onLogin}
+              >
               Ingresar
             </button>
           </div>

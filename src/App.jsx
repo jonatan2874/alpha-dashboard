@@ -15,26 +15,33 @@ import Chat from './pages/admin/Chat';
 import Profile from './pages/admin/Profile';
 
 import  Error404  from './pages/Error404';
+import Tickets from './pages/admin/Tickets';
+import AuthProvider from './context/auth/AuthProvider';
 
 function App() {
 
   return (
-    <BrowserRouter >
-      <Routes>
-        <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register/>} />
-        <Route path="/forgot-password" element={<ForgotPassword/>} />
+    <AuthProvider>
 
-        <Route path="/" element={<LayoutAdmin/>} >
-          <Route index element={<Home/>} />
-          <Route path="chat" element={<Chat/>} />
-          <Route path="profile" element={<Profile/>} />
-        </Route>
+      <BrowserRouter >
+        <Routes>
+          <Route path="/login" element={<Login/>} />
+          <Route path="/register" element={<Register/>} />
+          <Route path="/forgot-password" element={<ForgotPassword/>} />
 
-        <Route path="*" element={<Error404/>} />
+          <Route path="/" element={<LayoutAdmin/>} >
+            <Route index element={<Home/>} />
+            <Route path="chat" element={<Chat/>} />
+            <Route path="profile" element={<Profile/>} />
+            <Route path="tickets" element={<Tickets />} />
+          </Route>
 
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Error404/>} />
+
+        </Routes>
+      </BrowserRouter>
+      
+    </AuthProvider>
   )
 }
 

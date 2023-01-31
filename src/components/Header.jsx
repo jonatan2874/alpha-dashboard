@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useContext} from 'react'
 
 //icons
 import { 
@@ -15,8 +15,11 @@ import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/auth';
 
 const Header = () => {
+  const {user} = useContext(AuthContext)
+  console.log(user)
   return (
     <header 
         className='h-[7vh] md:h-[10uh] border-b border-secondary-100 p-8 flex items-center justify-end'
@@ -96,7 +99,7 @@ const Header = () => {
                               src="https://img.freepik.com/foto-gratis/retrato-joven-sonriente-gafas_171337-4842.jpg" 
                               className='w-6 h-6 object-cover rounded-full'
                             />
-                            <span>jonatan herran </span>
+                            <span>{user?.name}</span>
                             <RiArrowDownSLine/>
                         </MenuButton> 
                       } 
@@ -117,7 +120,7 @@ const Header = () => {
                   className='w-8 h-8 object-cover rounded-full'
                 />
                 <div className='flex flex-col text-sm'>
-                  <span className='text-sm'>jonatan herran </span>
+                  <span className='text-sm'>{user?.name}</span>
                   <span className='text-xs text-gray-500'>herran1212@hotmail.com</span>
                 </div>
               </Link>
