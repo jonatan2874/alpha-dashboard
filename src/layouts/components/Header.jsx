@@ -15,10 +15,15 @@ import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/auth';
+import { AuthContext } from '../../context/auth';
 
 const Header = () => {
-  const {user} = useContext(AuthContext)
+  const {user,logout} = useContext(AuthContext)
+
+  const onLogout = ()=>{
+    logout();
+  }
+
   console.log(user)
   return (
     <header 
@@ -137,8 +142,9 @@ const Header = () => {
             </MenuItem>
             <MenuItem className="p-0 hover:bg-transparent">
               <Link 
-                to="/logout" 
+                to="/login" 
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 py-3 px-6 flex-1"
+                onClick={onLogout}
               >
                 <RiLogoutCircleRLine />
                 <span>Cerrar Sesion</span>
