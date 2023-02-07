@@ -8,7 +8,8 @@ const init = ()=>{
     const user = JSON.parse(localStorage.getItem('user'))
     return {
         logged: !!user,
-        user
+        user,
+        theme : 'dark'
     }
 }
 
@@ -19,11 +20,14 @@ const AuthProvider = ({ children }) => {
     const login = (name = '') =>{
         const user = {
             id : 1,
-            name : name
+            name : name,
         }
         const action = {
             type : types.login,
-            payload : user
+            payload : {
+                user,
+                theme : 'dark'                
+            }
         }
 
         localStorage.setItem('user',JSON.stringify(user))
@@ -40,6 +44,16 @@ const AuthProvider = ({ children }) => {
 
     }
 
+    const changeTheme = ()=>{
+        const action = {
+            type : types.theme,
+            payload : {
+                ...state
+            }
+        }
+        dispatch(action);
+    }
+
     return (
         <AuthContext.Provider value={{
                 //state
@@ -47,7 +61,8 @@ const AuthProvider = ({ children }) => {
 
                 //methods
                 login,
-                logout
+                logout,
+                changeTheme
             }}>
             {children}
         </AuthContext.Provider>

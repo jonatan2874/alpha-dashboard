@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.theme-dark {
+  --color-primary      : theme("colors.dark.primary");
+  --color-secondary-50 : theme("colors.dark.secondary.50");
+  --color-secondary-100: theme("colors.dark.secondary.100");
+  --color-secondary-900: theme("colors.dark.secondary.900");
+}
+
+.theme-light {
+  --color-primary      : theme("colors.light.primary");
+  --color-secondary-50 : theme("colors.light.secondary.50");
+  --color-secondary-100: theme("colors.light.secondary.100");
+  --color-secondary-900: theme("colors.light.secondary.900");
+}
+
 ::-webkit-scrollbar{
   width: 0px;
 }

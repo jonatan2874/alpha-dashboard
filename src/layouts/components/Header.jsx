@@ -10,6 +10,7 @@ import {
   RiChat3Line,
 
 } from 'react-icons/ri'
+import { HiSun,HiMoon } from "react-icons/hi";
 
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
@@ -18,18 +19,26 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
 
 const Header = () => {
-  const {user,logout} = useContext(AuthContext)
+  const {user,logout,theme,changeTheme} = useContext(AuthContext)
 
   const onLogout = ()=>{
     logout();
   }
 
-  console.log(user)
+  const onChangeTheme = ()=>{
+    changeTheme();
+  }
+
   return (
     <header 
-        className='h-[7vh] md:h-[10uh] border-b border-secondary-100 p-8 flex items-center justify-end'
+        className='h-[7vh] w-full border-b border-secondary-100 p-8 flex items-center justify-end'
     >
         <nav className='flex items-center gap-x-2'>
+        <button onClick={onChangeTheme} className="hover:bg-secondary-100 text-secondary-50 p-2 rounded-lg">
+          {theme=="dark"?  <HiSun className='text-2xl' /> : <HiMoon className='text-2xl' /> }
+          
+        </button>
+
           <Menu 
             menuClassName="bg-secondary-100 p-4"
             transition

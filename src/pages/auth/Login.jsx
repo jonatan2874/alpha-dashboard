@@ -25,7 +25,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-secondary-900 text-gray-300">
       <div className="bg-secondary-100 p-8 rounded-xl shadow-xl" >
         <h1 className="text-3xl text-center font-bold tracking-[5px] text-white mb-8 w-auto lg:w-[450px]">Iniciar Sesión</h1>
         <form className="mb-8">
