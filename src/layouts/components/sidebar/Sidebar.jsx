@@ -1,12 +1,13 @@
-import React, {useState,useContext} from 'react'
+import React, {useState} from 'react'
 //icons
 import { 
         HiOutlineMenu
      } from 'react-icons/hi'
 
-//context
-import { generateNavigation } from './Navigation';
-import navigationConfig from '../../../router/navigationConfig';
+//submenus an navigation
+import { subMenus } from './Navigation';
+import links from "../../navigation.json";
+
 
 const Sidebar = () => {
     const [showMenu,setShowMenu] = useState(false);
@@ -26,7 +27,9 @@ const Sidebar = () => {
                     />
                 </div>
                 <ul>
-                    {generateNavigation(navigationConfig)}
+                {links.map( link => (
+                    subMenus({link})
+                  ))}
                 </ul>
             </div>
         </div>

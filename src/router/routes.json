@@ -1,0 +1,53 @@
+
+[
+    {
+        "path": "/login",
+        "component": "../pages/auth/Login",
+        "exact": true
+    },
+    {
+        "path": "/register",
+        "component": "../pages/auth/Register",
+        "exact": true
+    },
+    {
+        "path": "/forgot-password",
+        "component": "../pages/auth/ForgotPassword",
+        "exact": true
+    },
+    {
+        "path": "/",
+        "component": "../layouts/LayoutMain",
+        "exact": true,
+        "routes" : [
+            {
+                "path": "/*",
+                "component": "../pages/Error404",
+                "exact": true
+            },
+            {
+                "path": "/profile",
+                "component": "../pages/admin/Profile",
+                "exact": true
+            },
+            {
+                "path": "/tickets",
+                "component": "../pages/admin/Tickets",
+                "exact": true
+            },
+            {
+                "path": "/documentation",
+                "component": "../pages/documentation/Documentation",
+                "exact": true,
+                "routes" : [
+                    {
+                        "path": "buttons",
+                        "component": "../pages/documentation/components/ButtonDoc",
+                        "exact": true
+                    } 
+                ]
+            }
+        ]
+    }
+    
+]

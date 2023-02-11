@@ -1,45 +1,49 @@
-import {useContext} from 'react';
+import {useContext,lazy, Suspense  } from 'react';
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 
-// layout
-import LayoutMain from '../layouts/LayoutMain';
-
-//pages auth
-import  Login  from '../pages/auth/Login';
-import  Register from '../pages/auth/Register';
-import ForgotPassword from '../pages/auth/ForgotPassword';
-
-//pages admin
-import  Home  from '../pages/admin/Home';
-import Chat from '../pages/admin/Chat';
-import Profile from '../pages/admin/Profile';
-
-import  Error404  from '../pages/Error404';
-import Tickets from '../pages/admin/Tickets';
-
+import  routes from "./routes.json";
 import { AuthContext } from '../context/auth';
+
+let globalCounter = 0;
+
+const loadComponent = (componentName) => {
+  return lazy(() => import(`${componentName}.jsx`));
+}
+
+const RouteWithSubRoutes = ({ route}) => {
+  if (!route || !route.component) {
+    return null;
+  }
+  const id = globalCounter++;
+  const Component = loadComponent(route.component);
+  
+    return (
+    
+    <Route
+      key={id}
+      path={route.path}
+      element={
+              <Suspense fallback={<div>Loading...</div>}>
+                 <Component  />
+              </Suspense>
+            }
+    >
+      {route.routes && route.routes.map((subroute, i) => {
+                   return RouteWithSubRoutes({route:subroute})
+      })}
+    </Route>
+  );
+}
 
 const AppRouter = () => {
   const {theme} = useContext(AuthContext);
-  
   return (
           <div className={theme=='dark'? 'theme-dark' : 'theme-light'}>
             <BrowserRouter >
                 <Routes>
-                    <Route path="/login" element={<Login/>} />
-                    <Route path="/register" element={<Register/>} />
-                    <Route path="/forgot-password" element={<ForgotPassword/>} />
-
-                    <Route path="/" element={<LayoutMain/>} >
-                      <Route index element={<Home/>} />
-                      <Route path="chat" element={<Chat/>} />
-                      <Route path="profile" element={<Profile/>} />
-                      <Route path="tickets" element={<Tickets />} />
-                      <Route path="*" element={<Error404/>} />
-                    </Route>
-
-                    <Route path="*" element={<Error404/>} />
-
+                  {routes.map((route, i) => (
+                    RouteWithSubRoutes({route})
+                  ))}
                 </Routes>
             </BrowserRouter >
           </div>

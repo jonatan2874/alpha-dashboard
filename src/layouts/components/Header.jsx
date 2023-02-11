@@ -10,7 +10,7 @@ import {
   RiChat3Line,
 
 } from 'react-icons/ri'
-import { HiSun,HiMoon } from "react-icons/hi";
+import { HiSun,HiOutlineMoon } from "react-icons/hi";
 
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
@@ -35,7 +35,7 @@ const Header = () => {
     >
         <nav className='flex items-center gap-x-2'>
         <button onClick={onChangeTheme} className="hover:bg-secondary-100 text-secondary-50 p-2 rounded-lg">
-          {theme=="dark"?  <HiSun className='text-2xl' /> : <HiMoon className='text-2xl' /> }
+          {theme=="dark"?  <HiSun className='text-2xl' /> : <HiOutlineMoon className='text-2xl' /> }
           
         </button>
 
@@ -47,9 +47,9 @@ const Header = () => {
             align="center"
             menuButton={
               <MenuButton
-                className="relative hover:bg-secondary-100 p-2 rounded-lg transition-colors">
+                className="relative hover:bg-secondary-100 p-2 rounded-lg text-secondary-50 transition-colors">
                   <RiNotification3Line/>
-                  <span className="absolute -top-0.5 -right-0 bg-primary box-content py-0.5 px-1.5 text-black rounded-full text-[8px] font-bold">2</span>
+                  <span className="absolute -top-0.5 -right-0 bg-primary box-content py-0.5 px-1.5 text-secondary-50 rounded-full text-[8px] font-bold">2</span>
               </MenuButton> 
             }
           >
@@ -107,7 +107,7 @@ const Header = () => {
             menuClassName="bg-secondary-100 p-4"
             menuButton={
                         <MenuButton
-                          className="flex items-center gap-x-2 hover:bg-secondary-100 py-2 px-4 rounded-lg transition-colors">
+                          className="flex items-center gap-x-2 hover:bg-secondary-100 py-2 px-4 text-secondary-50 rounded-lg transition-colors">
 
                             <img 
                               src="https://img.freepik.com/foto-gratis/retrato-joven-sonriente-gafas_171337-4842.jpg" 
