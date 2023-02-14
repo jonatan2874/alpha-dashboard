@@ -1,19 +1,11 @@
-import {lazy,useState} from 'react'
+import {useState} from 'react'
 import { Link } from 'react-router-dom'
 
-//icons
+//load icons
 const iconsri = await import('react-icons/ri');
 const iconshi = await import('react-icons/hi');
-// console.log(typeof iconsri)
+// join icons in a only const
 const icons = {...iconsri,...iconshi};
-
-const loadComponent = componentName => {
-  return lazy(() => import(`${componentName}.jsx`));
-};
-
-const loadIcon = iconName => {
-  return lazy(() => import(`react-icons/ri/${iconName}`));
-};
 
 const subMenus = ({link}) =>{
 
@@ -56,15 +48,12 @@ const collapse = item =>{
                     {icons[item.icon] && icons[item.icon]()}  
                     {item.title}
                 </span>
-                {icons['RiArrowRightSLine']()}
-                
-                {/* <RiArrowRightSLine className={`mt-1  transition-all ${showSubMenu && "rotate-90"}`}/> */}
+                {icons['RiArrowRightSLine']()}                
             </button>
             <ul className={`my-2 py-2 px-4 transition-all duration-500 ${!showSubMenu && "hidden"}`}>
                 {item.children && item.children.map( sublink => (
-                    subMenus({sublink})
+                    subMenus({link:sublink})
                   ))}
-                {/* {generateNavigation(navItem.children)}  */}
             </ul>
       </li>
   )
