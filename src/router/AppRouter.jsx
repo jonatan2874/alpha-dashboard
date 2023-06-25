@@ -1,4 +1,4 @@
-import {useContext,lazy, Suspense  } from 'react';
+import {useContext,lazy, Suspense,memo  } from 'react';
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 
 import  routes from "./routes.json";
@@ -7,7 +7,8 @@ import { AuthContext } from '../context/auth';
 let globalCounter = 0;
 
 const loadComponent = (componentName) => {
-  return lazy(() => import(`${componentName}.jsx`));
+  const Component =  lazy(() => import(/* @vite-ignore */ `${componentName}.jsx`));
+  return memo(Component);
 }
 
 const RouteWithSubRoutes = ({ route}) => {
