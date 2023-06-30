@@ -7,7 +7,7 @@ import { types } from "./types/types";
 const init = ()=>{
     const user = JSON.parse(localStorage.getItem('user'))
     return {
-        logged: !!user,
+        is_auth: !!user,
         user,
         theme : 'dark'
     }
@@ -21,7 +21,12 @@ const AuthProvider = ({ children }) => {
         const user = {
             id : 1,
             name : name,
+            role : "admin",
+            permissions : [
+                            "documentation"
+                        ]
         }
+
         const action = {
             type : types.login,
             payload : {

@@ -1,25 +1,29 @@
 
 [
     {
-        "path": "/login",
+        "path"     : "/login",
         "component": "../pages/auth/Login",
-        "exact": true
+        "private"  : false,
+        "exact"    : true
     },
     {
-        "path": "/register",
+        "path"     : "/register",
         "component": "../pages/auth/Register",
-        "exact": true
+        "private"  : false,
+        "exact"    : true
     },
     {
-        "path": "/forgot-password",
+        "path"     : "/forgot-password",
         "component": "../pages/auth/ForgotPassword",
-        "exact": true
+        "private"  : false,
+        "exact"    : true
     },
     {
-        "path": "/",
+        "path"     : "/",
         "component": "../layouts/LayoutMain",
-        "exact": true,
-        "routes" : [
+        "exact"    : true,
+        "private"  : true,
+        "routes"   : [
             {
                 "path": "/*",
                 "component": "../pages/Error404",

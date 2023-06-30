@@ -1,12 +1,13 @@
 
 [
     {
-      "id": "documentation",
-      "title": "Documentation",
-      "subtitle": "Everything you need to know about alpha",
-      "type": "group",
-      "icon": "heroicons-outline:home",
+      "id"       : "documentation",
+      "title"    : "Documentation",
+      "subtitle" : "Everything you need to know about alpha",
+      "type"     : "group",
+      "icon"     : "heroicons-outline: home",
       "translate": "DOCUMENTATION",
+      "url"      : "documentation",
       "children" : [
         {
           "id": "documentation.components",
