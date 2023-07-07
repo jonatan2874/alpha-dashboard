@@ -21,8 +21,7 @@
               "title": "Buttons",
               "type": "item",
               "icon": "HiCursorClick",
-              "url": "documentation/buttons",
-              "end": true
+              "url": "documentation/buttons"
             }
             
           ]

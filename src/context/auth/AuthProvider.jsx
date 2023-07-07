@@ -23,7 +23,11 @@ const AuthProvider = ({ children }) => {
             name : name,
             role : "admin",
             permissions : [
-                            "documentation"
+                            "documentation",
+                            "documentation/buttons",
+                            "/tickets",
+                            "/dashboards/analytics",
+                            "/dashboards/finance"
                         ]
         }
 

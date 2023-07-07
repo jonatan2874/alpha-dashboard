@@ -1,5 +1,6 @@
-import {useState} from 'react'
+import {useState,useContext} from 'react'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../../context/auth';
 
 //load icons
 const iconsri = await import('react-icons/ri');
@@ -8,7 +9,9 @@ const iconshi = await import('react-icons/hi');
 const icons = {...iconsri,...iconshi};
 
 const subMenus = ({link}) =>{
-
+  const {user} = useContext(AuthContext);
+  const { permissions = [] } = user || [];
+  
   if (!link || !link.type) {
     return null;
   }
@@ -18,7 +21,8 @@ const subMenus = ({link}) =>{
     case "collapse" :
       return collapse(link);
     default:
-      return item(link);
+      const menu = (permissions.includes(link.url)) ? item(link) : <></> ;
+      return   menu;
   }
 }
 
