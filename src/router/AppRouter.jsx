@@ -36,8 +36,7 @@ const RouteWithSubRoutes = ({ route}) => {
     return created_route;
 }
 
-const PrivateRoute = (is_auth, permissions, route)=>{
-  console.log(is_auth, permissions, route)
+const PrivateRoute = (is_auth, permissions = ["login"], route)=>{
   const Component = !is_auth || permissions.includes(route.path) && route.path!='/' ?
                     <Route
                       key={new Date().getMilliseconds()}
@@ -53,7 +52,8 @@ const PrivateRoute = (is_auth, permissions, route)=>{
  * 
  */
 const AppRouter = () => {
-  const {user,is_auth,theme} = useContext(AuthContext);
+  const {user ,is_auth,theme} = useContext(AuthContext);
+  const { permissions = [] } = user || [];
 
   return (
           <div className={theme=='dark'? 'theme-dark' : 'theme-light'}>
@@ -61,7 +61,7 @@ const AppRouter = () => {
                 <Routes>
                   {routes.map((route, i) => (
                     route.private ?   
-                    PrivateRoute(is_auth, user.permissions, route):                    
+                    PrivateRoute(is_auth, permissions, route):                    
                     RouteWithSubRoutes({route})
                   ))}
                 </Routes>
