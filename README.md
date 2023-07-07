@@ -52,3 +52,15 @@ _Proyecto ligero con minimo uso de librerias de terceros_
 * [react-icons](https://react-icons.github.io/react-icons/) - Paquete de iconos
 * [axios](https://axios-http.com/) - Cliente HTTP
 * [i18n](https://react.i18next.com/) - Gestor de traduccion
+
+## Autor ✒️
+
+
+* **Jonatan Stive Herran Arias** - *Software Developer* - [jonatan2874](https://github.com/jonatan2874)
+
+También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
+
+## Licencia 📄
+
+Este proyecto está bajo la Licencia (propietario) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
+
