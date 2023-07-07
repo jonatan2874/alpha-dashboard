@@ -21,7 +21,7 @@ const subMenus = ({link}) =>{
     case "collapse" :
       return collapse(link);
     default:
-      const menu = (permissions.includes(link.url)) ? item(link) : <></> ;
+      const menu = (permissions.includes(link.url)) ? item(link) : null ;
       return   menu;
   }
 }
