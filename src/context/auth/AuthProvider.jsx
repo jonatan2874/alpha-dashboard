@@ -27,7 +27,8 @@ const AuthProvider = ({ children }) => {
                             "documentation/buttons",
                             "/tickets",
                             "/dashboards/analytics",
-                            "/dashboards/finance"
+                            "/dashboards/finance",
+                            "documentation/crud"
                         ]
         }
 

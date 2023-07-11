@@ -48,7 +48,13 @@
                         "path": "buttons",
                         "component": "../pages/documentation/components/ButtonDoc",
                         "exact": true
-                    } 
+                    },
+                    {
+                        "path": "crud",
+                        "component": "../pages/documentation/components/CrudExample",
+                        "exact": true
+                    }
+                    
                 ]
             }
         ]

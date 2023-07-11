@@ -22,6 +22,13 @@
               "type": "item",
               "icon": "HiCursorClick",
               "url": "documentation/buttons"
+            },
+            {
+              "id": "components-crud",
+              "title": "Crud",
+              "type": "item",
+              "icon": "HiOutlineClipboardList",
+              "url": "documentation/crud"
             }
             
           ]
