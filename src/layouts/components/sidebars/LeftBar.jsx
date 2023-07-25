@@ -9,7 +9,7 @@ import { subMenus } from './Navigation';
 import links from "../../navigation.json";
 
 
-const Sidebar = () => {
+const LeftBar = () => {
     const [showMenu,setShowMenu] = useState(false);
   return (
     <>
@@ -43,4 +43,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default LeftBar
