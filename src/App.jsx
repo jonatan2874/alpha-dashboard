@@ -1,12 +1,13 @@
-import AuthProvider from './context/auth/AuthProvider';
+// import AuthProvider from './context/auth/AuthProvider';
+import MainContext from './context/MainContext';
 import AppRouter from './router/AppRouter';
 
 function App() {
 
   return (
-    <AuthProvider>
+    <MainContext>
       <AppRouter/>
-    </AuthProvider>
+    </MainContext>
   )
 }
 
