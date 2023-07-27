@@ -1,0 +1,26 @@
+[
+				"structure" => [
+					"name" => [
+						"alias" => "nombre"
+					],
+					"branch" => [
+						"alias" => "sucursal"
+					],
+					"company" => [
+						"alias" => "empresa"
+					]
+				],
+				"data" => [
+					[
+						'name' => 'bodega 1',
+						"branch" => "sucursal principal",
+						"company" => "empresa"
+					],
+					[
+						'name' => 'bodega 2',
+						"branch" => "sucursal 2",
+						"company" => "empresa 2"
+					]
+				]
+				
+			]

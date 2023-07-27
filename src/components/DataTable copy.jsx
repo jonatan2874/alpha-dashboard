@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button, Modal, TextField, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Button, Modal, TextField, Box } from '@mui/material';
+import { TwButton } from './ui';
+
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 
 const DataTable = ({ endpoint }) => {
@@ -78,35 +79,46 @@ const DataTable = ({ endpoint }) => {
     const columns = [];
     for (const key in data.structure) {
       const element = data.structure[key];
-      columns.push({ field: key, headerName: element.alias ? element.alias : key, width: 150 });
+      columns.push(<TableCell key={key}>{element.alias ? element.alias : key}</TableCell>);
     }
-    columns.push({
-      field: 'actions',
-      headerName: 'Acciones',
-      width: 200,
-      renderCell: (params) => (
-        <div className="flex items-center gap-4 text-xl">
-          <MdModeEdit
-            onClick={() => handleEdit(params.row)}
-            className="cursor-pointer"
-            title="editar"
-          />
-          <MdDelete
-            className="cursor-pointer"
-            onClick={() => handleDelete(params.row.id)}
-            title="eliminar"
-          />
-        </div>
-      ),
-    });
     return columns;
   };
 
+  const getFormFields = () => {
+    if (!data.structure) return null;
+
+    return Object.keys(data.structure).map((field, index) => (
+      <div key={index} className="mb-2">
+        <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+          {field}
+        </label>
+        <TextField fullWidth name={field} value={formData[field] || ''} onChange={handleChange} variant="outlined" />
+      </div>
+    ));
+  };
+
   const getRows = () => {
-    if (data.data && Array.isArray(data.data)) {
-      return data.data.map((row, index) => ({ id: index, ...row }));
+    if (data.length <= 0) return null;
+
+    const rows = [];
+    if (Object.keys(data).length > 0 && data.structure) {
+      data.data.forEach((row, rowIndex) => {
+        const columns = [];
+        for (const key in data.structure) {
+          const element = data.structure[key];
+          const value = row[key];
+          columns.push(<TableCell key={`${rowIndex}-${key}`}>{value || element.alias || ''}</TableCell>);
+        }
+        columns.push(
+          <TableCell key={`actions-${rowIndex}`} className="flex items-center gap-4 text-xl">
+            <MdModeEdit onClick={() => handleEdit(row)} className="cursor-pointer" title="editar" />
+            <MdDelete className="cursor-pointer" onClick={() => handleDelete(row.id)} title="eliminar" />
+          </TableCell>
+        );
+        rows.push(<TableRow key={rowIndex}>{columns}</TableRow>);
+      });
     }
-    return [];
+    return rows;
   };
 
   const handleChangePage = (event, newPage) => {
@@ -118,26 +130,35 @@ const DataTable = ({ endpoint }) => {
     setPage(0);
   };
 
-  const rowsOnPage = getRows().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const rowsOnPage = getRows() ? getRows().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : null;
 
   return (
     <div className="p-4">
-      <DataGrid
-        rows={rowsOnPage}
-        columns={getColumns()}
-        pagination
-        pageSize={rowsPerPage}
-        rowCount={getRows().length}
-        onPageChange={handleChangePage}
-        onPageSizeChange={handleChangeRowsPerPage}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {getColumns()}
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{rowsOnPage}</TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
-        autoHeight
+        component="div"
+        count={getRows() ? getRows().length : 0}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
       {/* Botón de Agregar */}
-      <Button variant="contained" color="primary" onClick={handleShowModal}>
+      <TwButton variant="contained" color="primary" onClick={handleShowModal}>
         Agregar
-      </Button>
+      </TwButton>
 
       {/* Ventana modal para editar/agregar */}
       <Modal open={showModal} onClose={handleCloseModal}>
@@ -155,32 +176,18 @@ const DataTable = ({ endpoint }) => {
         >
           <h2>{editingRow ? 'Editar' : 'Agregar'} Datos</h2>
           {/* Renderizar los campos del formulario basados en las claves del objeto de datos */}
-          {data.structure &&
-            Object.keys(data.structure).map((field, index) => (
-              <div key={index} className="mb-2">
-                <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
-                  {field}
-                </label>
-                <TextField
-                  fullWidth
-                  name={field}
-                  value={formData[field] || ''}
-                  onChange={handleChange}
-                  variant="outlined"
-                />
-              </div>
-            ))}
+          {getFormFields()}
 
           <div className="flex justify-end pt-2">
-            <Button onClick={handleCloseModal}>Cancelar</Button>
+            <TwButton onClick={handleCloseModal}>Cancelar</TwButton>
             {editingRow ? (
-              <Button onClick={handleUpdate} color="primary">
+              <TwButton onClick={handleUpdate} color="primary">
                 Actualizar
-              </Button>
+              </TwButton>
             ) : (
-              <Button onClick={handleAdd} color="primary">
+              <TwButton onClick={handleAdd} color="primary">
                 Agregar
-              </Button>
+              </TwButton>
             )}
           </div>
         </Box>
