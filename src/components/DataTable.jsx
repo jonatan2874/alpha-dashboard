@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button, Modal, TextField, Box } from '@mui/material';
@@ -11,6 +12,13 @@ const DataTable = ({ endpoint }) => {
   const [editingRow, setEditingRow] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     fetchData();
@@ -33,19 +41,20 @@ const DataTable = ({ endpoint }) => {
     setShowModal(false);
     setFormData({});
     setEditingRow(null);
+    reset();
   };
 
-  const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
-
-  const handleAdd = async () => {
+  const onSubmit = async (formData) => {
     try {
-      await axios.post(endpoint, formData);
+      if (editingRow) {
+        await axios.put(`${endpoint}/${editingRow.id}`, formData);
+      } else {
+        await axios.post(endpoint, formData);
+      }
       fetchData();
       handleCloseModal();
     } catch (error) {
-      console.error('Error adding data:', error);
+      console.error('Error adding/updating data:', error);
     }
   };
 
@@ -53,16 +62,6 @@ const DataTable = ({ endpoint }) => {
     setFormData(row);
     setEditingRow(row);
     handleShowModal();
-  };
-
-  const handleUpdate = async () => {
-    try {
-      await axios.put(`${endpoint}/${editingRow.id}`, formData);
-      fetchData();
-      handleCloseModal();
-    } catch (error) {
-      console.error('Error updating data:', error);
-    }
   };
 
   const handleDelete = async (id) => {
@@ -86,11 +85,7 @@ const DataTable = ({ endpoint }) => {
       width: 200,
       renderCell: (params) => (
         <div className="flex items-center gap-4 text-xl">
-          <MdModeEdit
-            onClick={() => handleEdit(params.row)}
-            className="cursor-pointer"
-            title="editar"
-          />
+          <MdModeEdit onClick={() => handleEdit(params.row)} className="cursor-pointer" title="editar" />
           <MdDelete
             className="cursor-pointer"
             onClick={() => handleDelete(params.row.id)}
@@ -132,6 +127,13 @@ const DataTable = ({ endpoint }) => {
         onPageSizeChange={handleChangeRowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
         autoHeight
+        className='bg-gray-100'
+        componentsProps={{
+          // Estilos personalizados para los encabezados de las columnas
+          MuiDataGridHeader: {
+            root: 'bg-blue-500 text-white', // Cambia aquí el color de fondo y el color del texto deseado
+          },
+        }}
       />
 
       {/* Botón de Agregar */}
@@ -154,35 +156,31 @@ const DataTable = ({ endpoint }) => {
           }}
         >
           <h2>{editingRow ? 'Editar' : 'Agregar'} Datos</h2>
-          {/* Renderizar los campos del formulario basados en las claves del objeto de datos */}
-          {data.structure &&
-            Object.keys(data.structure).map((field, index) => (
-              <div key={index} className="mb-2">
-                <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
-                  {field}
-                </label>
-                <TextField
-                  fullWidth
-                  name={field}
-                  value={formData[field] || ''}
-                  onChange={handleChange}
-                  variant="outlined"
-                />
-              </div>
-            ))}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Renderizar los campos del formulario basados en las claves del objeto de datos */}
+            {data.structure &&
+              Object.keys(data.structure).map((field, index) => (
+                <div key={index} className="mb-2">
+                  <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+                    {field}
+                  </label>
+                  <Controller
+                    name={field}
+                    control={control}
+                    defaultValue={formData[field] || ''}
+                    render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
+                  />
+                  {errors[field] && <p className="text-red-500">{errors[field].message}</p>}
+                </div>
+              ))}
 
-          <div className="flex justify-end pt-2">
-            <Button onClick={handleCloseModal}>Cancelar</Button>
-            {editingRow ? (
-              <Button onClick={handleUpdate} color="primary">
-                Actualizar
+            <div className="flex justify-end pt-2">
+              <Button onClick={handleCloseModal}>Cancelar</Button>
+              <Button type="submit" color="primary">
+                {editingRow ? 'Actualizar' : 'Agregar'}
               </Button>
-            ) : (
-              <Button onClick={handleAdd} color="primary">
-                Agregar
-              </Button>
-            )}
-          </div>
+            </div>
+          </form>
         </Box>
       </Modal>
     </div>
