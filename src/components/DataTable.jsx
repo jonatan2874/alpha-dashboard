@@ -45,6 +45,7 @@ const DataTable = ({ endpoint }) => {
   };
 
   const onSubmit = async (formData) => {
+    console.log(formData,editingRow)
     try {
       if (editingRow) {
         await axios.put(`${endpoint}/${editingRow.id}`, formData);
@@ -104,6 +105,27 @@ const DataTable = ({ endpoint }) => {
     return [];
   };
 
+  const setForm = ()=>{
+    if (!data.structure) {  return; }
+    const fields = [];
+    for (const field in data.structure) {
+      const element = data.structure[field];
+      fields.push(<div key={field} className="mb-2">
+                       <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+                         {element.alias ? element.alias : field}
+                       </label>
+                       <Controller
+                         name={field}
+                         control={control}
+                         defaultValue={formData[field] || ''}
+                         render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
+                       />
+                       {errors[field] && <p className="text-red-500">{errors[field].message}</p>}
+                     </div>);
+    }
+      return fields;
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -128,12 +150,6 @@ const DataTable = ({ endpoint }) => {
         rowsPerPageOptions={[5, 10, 25]}
         autoHeight
         className='bg-gray-100'
-        componentsProps={{
-          // Estilos personalizados para los encabezados de las columnas
-          MuiDataGridHeader: {
-            root: 'bg-blue-500 text-white', // Cambia aquí el color de fondo y el color del texto deseado
-          },
-        }}
       />
 
       {/* Botón de Agregar */}
@@ -158,7 +174,8 @@ const DataTable = ({ endpoint }) => {
           <h2>{editingRow ? 'Editar' : 'Agregar'} Datos</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Renderizar los campos del formulario basados en las claves del objeto de datos */}
-            {data.structure &&
+            {setForm()}
+            {/* {data.structure &&
               Object.keys(data.structure).map((field, index) => (
                 <div key={index} className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
@@ -172,7 +189,7 @@ const DataTable = ({ endpoint }) => {
                   />
                   {errors[field] && <p className="text-red-500">{errors[field].message}</p>}
                 </div>
-              ))}
+              ))} */}
 
             <div className="flex justify-end pt-2">
               <Button onClick={handleCloseModal}>Cancelar</Button>

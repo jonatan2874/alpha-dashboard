@@ -1,26 +1,76 @@
-[
-				"structure" => [
-					"name" => [
-						"alias" => "nombre"
-					],
-					"branch" => [
-						"alias" => "sucursal"
-					],
-					"company" => [
-						"alias" => "empresa"
-					]
-				],
-				"data" => [
-					[
-						'name' => 'bodega 1',
-						"branch" => "sucursal principal",
-						"company" => "empresa"
-					],
-					[
-						'name' => 'bodega 2',
-						"branch" => "sucursal 2",
-						"company" => "empresa 2"
-					]
-				]
-				
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
+    header('Access-Control-Allow-Headers: *');
+    exit;
+}
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
+header('Access-Control-Allow-Headers: *');
+header('Content-Type: application/json; charset=utf-8');
+
+
+
+$method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === 'GET') {
+    // Endpoint GET
+    // Tu código para manejar la solicitud GET
+    // Puedes acceder a los parámetros de la solicitud a través de $_GET
+    // y generar la respuesta deseada.
+	$data = [
+		"structure" => [
+			"name" => [
+				"alias" => "nombre"
+			],
+			"branch" => [
+				"alias" => "sucursal"
+			],
+			"company" => [
+				"alias" => "empresa"
 			]
+		],
+		"data" => [
+				[
+					'name' => 'bodega 1',
+					"branch" => "sucursal principal",
+					"company" => "empresa"
+				],
+				[
+					'name' => 'bodega 2',
+					"branch" => "sucursal 2",
+					"company" => "empresa 2"
+				]
+			]
+	
+		];
+
+    // $response = array('message' => 'Este es un ejemplo de endpoint GET');
+    echo json_encode($data);
+} elseif ($method === 'POST') {
+    // Endpoint POST
+    // Tu código para manejar la solicitud POST
+    // Puedes acceder a los datos enviados en la solicitud a través de $_POST
+    // y generar la respuesta deseada.
+    $data = json_decode(file_get_contents('php://input'), true); // Captura los datos enviados en el cuerpo de la solicitud
+    var_dump($data);
+    // echo json_encode($response);
+} elseif ($method === 'PUT') {
+    // Endpoint PUT
+    // Tu código para manejar la solicitud PUT
+    // Puedes acceder a los datos enviados en la solicitud a través de la entrada estándar php://input
+    // y generar la respuesta deseada.
+    $data = json_decode(file_get_contents('php://input'), true);
+    $response = array('message' => 'Este es un ejemplo de endpoint PUT', 'data' => $data);
+    echo json_encode($response);
+} else {
+    // Método no permitido
+    http_response_code(405);
+    $response = array('error' => 'Método no permitido');
+    echo json_encode($response);
+}
+
+// echo json_encode($data);
