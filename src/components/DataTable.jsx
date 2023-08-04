@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Modal, TextField, Box } from '@mui/material';
+import { Button, Modal, TextField, Box, MenuItem, Switch, Radio, Checkbox } from '@mui/material';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 
 const DataTable = ({ endpoint }) => {
@@ -23,6 +23,10 @@ const DataTable = ({ endpoint }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(()=>{
+    console.log(errors)
+  },[errors])
 
   const fetchData = async () => {
     try {
@@ -45,7 +49,7 @@ const DataTable = ({ endpoint }) => {
   };
 
   const onSubmit = async (formData) => {
-    console.log(formData,editingRow)
+    console.log(formData, editingRow);
     try {
       if (editingRow) {
         await axios.put(`${endpoint}/${editingRow.id}`, formData);
@@ -105,26 +109,213 @@ const DataTable = ({ endpoint }) => {
     return [];
   };
 
-  const setForm = ()=>{
-    if (!data.structure) {  return; }
-    const fields = [];
+  const pattern = {
+    email: {
+      value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      message: 'Correo electrónico inválido',
+    },
+  };
+
+  const renderTextField = (field, label, rules = {}) => {
+    const error = errors[field];
+    return (
+      <div key={field} className="mb-2">
+        <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+          {label}
+        </label>
+        <Controller
+          name={field}
+          control={control}
+          defaultValue={formData[field] || ''}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              variant="outlined"
+              fullWidth
+              className={`${error ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50`}
+              error={!!error} // Setea el error en true cuando error existe
+              helperText={error?.message || ''} // Muestra el mensaje de error si existe, de lo contrario, muestra una cadena vacía
+            />
+          )}
+          rules={rules}
+        />
+      </div>
+    );
+  }; 
+
+  const setForm = () => {
+    if (!data.structure) {
+      return [];
+    }
+  
+    const fields = []; // Declare the variable fields here
     for (const field in data.structure) {
       const element = data.structure[field];
-      fields.push(<div key={field} className="mb-2">
-                       <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
-                         {element.alias ? element.alias : field}
-                       </label>
-                       <Controller
-                         name={field}
-                         control={control}
-                         defaultValue={formData[field] || ''}
-                         render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
-                       />
-                       {errors[field] && <p className="text-red-500">{errors[field].message}</p>}
-                     </div>);
+
+      if (element.type === 'select') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+              {element.alias ? element.alias : field}
+            </label>
+            <Controller
+              name={field}
+              control={control}
+              defaultValue={formData[field] || ''}
+              render={({ field }) => (
+                <TextField select {...field} variant="outlined" fullWidth>
+                  {element.options.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )}
+          </div>
+        );
+      } else if (element.type === 'checkbox') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              <Controller
+                name={field}
+                control={control}
+                defaultValue={formData[field] || false}
+                render={({ field }) => <Checkbox {...field} color="primary" />}
+              />
+              {element.alias ? element.alias : field}
+            </label>
+          </div>
+        );
+      } else if (element.type === 'radio') {
+        const radioOptions = Array.isArray(element.options) ? element.options : [];
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              {element.alias ? element.alias : field}
+            </label>
+            {radioOptions.map((option) => (
+              <label key={option.value} className="block text-gray-700 text-sm mb-1">
+                <Controller
+                  name={field}
+                  control={control}
+                  defaultValue={formData[field] || ''}
+                  render={({ field }) => (
+                    <Radio
+                      {...field}
+                      value={option.value}
+                      color="primary"
+                      checked={field.value === option.value}
+                    />
+                  )}
+                />
+                {option.label}
+              </label>
+            ))}
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )}
+          </div>
+        );
+      } else if (element.type === 'switch') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              <Controller
+                name={field}
+                control={control}
+                defaultValue={formData[field] || false}
+                render={({ field }) => <Switch {...field} color="primary" />}
+              />
+              {element.alias ? element.alias : field}
+            </label>
+          </div>
+        );
+      } else if (element.type === 'date') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              {element.alias ? element.alias : field}
+            </label>
+            <Controller
+              name={field}
+              control={control}
+              defaultValue={formData[field] || ''}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className={`${errors[field.name] ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50`}
+                  error={!!errors[field.name]} // Setea el error en true cuando error existe
+                  helperText={errors[field.name]?.message || ''}
+                />
+              )}
+              rules={element.required ? { required: 'Campo requerido' } : {}}
+            />
+            {/* {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )} */}
+          </div>
+        );
+      } else if (element.type === 'time') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              {element.alias ? element.alias : field}
+            </label>
+            <Controller
+              name={field}
+              control={control}
+              defaultValue={formData[field] || ''}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="time"
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className={`${errors[field.name] ? 'border-red-500' : 'border-gray-300'} focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50`}
+                  error={!!errors[field.name]} // Setea el error en true cuando error existe
+                  helperText={errors[field.name]?.message || ''}
+                />
+              )}
+              rules={element.required ? { required: 'Campo requerido' } : {}}
+            />
+          </div>
+        );
+      } else if (element.type === 'email') {
+        // Usa renderTextField para renderizar el campo de email
+        const rules = {
+          required: element.required ? 'correo requerido' : false,
+          pattern: { value: /^\S+@\S+$/i, message: 'El e-mail no es valido'}
+        }
+        fields.push(
+          renderTextField(field, element.alias ? element.alias : field, rules)
+        );
+      } else {
+        // Por defecto, mostrar un campo de texto
+        // Usa renderTextField para renderizar el campo de texto
+        fields.push(
+          renderTextField(field, element.alias ? element.alias : field, {
+            required: element.required ? 'Campo requerido' : false,
+          })
+        );
+      }
     }
-      return fields;
-  }
+
+    return fields;
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -149,7 +340,7 @@ const DataTable = ({ endpoint }) => {
         onPageSizeChange={handleChangeRowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
         autoHeight
-        className='bg-gray-100'
+        className="bg-gray-100"
       />
 
       {/* Botón de Agregar */}
@@ -175,21 +366,6 @@ const DataTable = ({ endpoint }) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Renderizar los campos del formulario basados en las claves del objeto de datos */}
             {setForm()}
-            {/* {data.structure &&
-              Object.keys(data.structure).map((field, index) => (
-                <div key={index} className="mb-2">
-                  <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
-                    {field}
-                  </label>
-                  <Controller
-                    name={field}
-                    control={control}
-                    defaultValue={formData[field] || ''}
-                    render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
-                  />
-                  {errors[field] && <p className="text-red-500">{errors[field].message}</p>}
-                </div>
-              ))} */}
 
             <div className="flex justify-end pt-2">
               <Button onClick={handleCloseModal}>Cancelar</Button>

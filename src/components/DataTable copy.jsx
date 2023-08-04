@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Modal, TextField, Box } from '@mui/material';
+import { Button, Modal, TextField, Box, MenuItem, Switch, Radio, Checkbox } from '@mui/material';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 
 const DataTable = ({ endpoint }) => {
@@ -45,6 +45,7 @@ const DataTable = ({ endpoint }) => {
   };
 
   const onSubmit = async (formData) => {
+    console.log(formData, editingRow);
     try {
       if (editingRow) {
         await axios.put(`${endpoint}/${editingRow.id}`, formData);
@@ -85,7 +86,11 @@ const DataTable = ({ endpoint }) => {
       width: 200,
       renderCell: (params) => (
         <div className="flex items-center gap-4 text-xl">
-          <MdModeEdit onClick={() => handleEdit(params.row)} className="cursor-pointer" title="editar" />
+          <MdModeEdit
+            onClick={() => handleEdit(params.row)}
+            className="cursor-pointer"
+            title="editar"
+          />
           <MdDelete
             className="cursor-pointer"
             onClick={() => handleDelete(params.row.id)}
@@ -102,6 +107,214 @@ const DataTable = ({ endpoint }) => {
       return data.data.map((row, index) => ({ id: index, ...row }));
     }
     return [];
+  };
+  
+
+  const setForm = () => {
+    if (!data.structure) {
+      return;
+    }
+  
+    const fields = [];
+  
+    const patterns = {
+      email: {
+        value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+        message: 'Correo electrónico inválido',
+      },
+    };
+  
+    const renderTextField = (field, label, rules = {}) => {
+      fields.push(
+        <div key={field} className="mb-2">
+          <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+            {label}
+          </label>
+          <Controller
+            name={field}
+            control={control}
+            defaultValue={formData[field] || ''}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                variant="outlined"
+                fullWidth
+                className={`${
+                  errors[field] ? 'border-red-500' : 'border-gray-300'
+                } focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50`}
+              />
+            )}
+            rules={rules}
+          />
+          {errors[field] && (
+            <p className="text-red-500 text-xs mt-1">{errors[field].message}</p>
+          )}
+        </div>
+      );
+    };
+
+    for (const field in data.structure) {
+      const element = data.structure[field];
+
+      if (element.type === 'select') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
+              {element.alias ? element.alias : field}
+            </label>
+            <Controller
+              name={field}
+              control={control}
+              defaultValue={formData[field] || ''}
+              render={({ field }) => (
+                <TextField select {...field} variant="outlined" fullWidth>
+                  {element.options.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )}
+          </div>
+        );
+      } else if (element.type === 'checkbox') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              <Controller
+                name={field}
+                control={control}
+                defaultValue={formData[field] || false}
+                render={({ field }) => <Checkbox {...field} color="primary" />}
+              />
+              {element.alias ? element.alias : field}
+            </label>
+          </div>
+        );
+      } else if (element.type === 'radio') {
+        const radioOptions = Array.isArray(element.options) ? element.options : [];
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              {element.alias ? element.alias : field}
+            </label>
+            {radioOptions.map((option) => (
+              <label key={option.value} className="block text-gray-700 text-sm mb-1">
+                <Controller
+                  name={field}
+                  control={control}
+                  defaultValue={formData[field] || ''}
+                  render={({ field }) => (
+                    <Radio
+                      {...field}
+                      value={option.value}
+                      color="primary"
+                      checked={field.value === option.value}
+                    />
+                  )}
+                />
+                {option.label}
+              </label>
+            ))}
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )}
+          </div>
+        );
+      } else if (element.type === 'switch') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              <Controller
+                name={field}
+                control={control}
+                defaultValue={formData[field] || false}
+                render={({ field }) => <Switch {...field} color="primary" />}
+              />
+              {element.alias ? element.alias : field}
+            </label>
+          </div>
+        );
+      } else if (element.type === 'date') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              {element.alias ? element.alias : field}
+            </label>
+            <Controller
+              name={field}
+              control={control}
+              defaultValue={formData[field] || ''}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className={`${
+                    errors[field] ? 'border-red-500' : 'border-gray-300'
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50`}
+                />
+              )}
+              rules={element.required ? { required: true } : {}}
+            />
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )}
+          </div>
+        );
+      } else if (element.type === 'time') {
+        fields.push(
+          <div key={field} className="mb-2">
+            <label className="block text-gray-700 text-sm font-bold mb-1">
+              {element.alias ? element.alias : field}
+            </label>
+            <Controller
+              name={field}
+              control={control}
+              defaultValue={formData[field] || ''}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="time"
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className={`${
+                    errors[field] ? 'border-red-500' : 'border-gray-300'
+                  } focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50`}
+                />
+              )}
+              rules={element.required ? { required: true } : {}}
+            />
+            {errors[field] && (
+              <p className="text-red-500 text-xs mt-1">Campo requerido</p>
+            )}
+          </div>
+        );
+      }else if (element.type === 'email') {
+        renderTextField(field, element.alias ? element.alias : field, {
+          required: element.required ? 'Campo requerido' : false,
+          pattern: patterns.email,
+        });
+      } else {
+        // Por defecto, mostrar un campo de texto
+        renderTextField(field, element.alias ? element.alias : field, {
+          required: element.required ? 'Campo requerido' : false,
+        });
+      }
+    }
+
+    return fields;
   };
 
   const handleChangePage = (event, newPage) => {
@@ -128,20 +341,12 @@ const DataTable = ({ endpoint }) => {
         rowsPerPageOptions={[5, 10, 25]}
         autoHeight
         className='bg-gray-100'
-        componentsProps={{
-          // Estilos personalizados para los encabezados de las columnas
-          MuiDataGridHeader: {
-            root: 'bg-blue-500 text-white', // Cambia aquí el color de fondo y el color del texto deseado
-          },
-        }}
       />
 
-      {/* Botón de Agregar */}
       <Button variant="contained" color="primary" onClick={handleShowModal}>
         Agregar
       </Button>
 
-      {/* Ventana modal para editar/agregar */}
       <Modal open={showModal} onClose={handleCloseModal}>
         <Box
           sx={{
@@ -152,28 +357,12 @@ const DataTable = ({ endpoint }) => {
             bgcolor: 'background.paper',
             boxShadow: 24,
             p: 4,
-            width: '300px', // Personaliza el ancho de la ventana modal
+            width: '300px',
           }}
         >
           <h2>{editingRow ? 'Editar' : 'Agregar'} Datos</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Renderizar los campos del formulario basados en las claves del objeto de datos */}
-            {data.structure &&
-              Object.keys(data.structure).map((field, index) => (
-                <div key={index} className="mb-2">
-                  <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={field}>
-                    {field}
-                  </label>
-                  <Controller
-                    name={field}
-                    control={control}
-                    defaultValue={formData[field] || ''}
-                    render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
-                  />
-                  {errors[field] && <p className="text-red-500">{errors[field].message}</p>}
-                </div>
-              ))}
-
+            {setForm()}
             <div className="flex justify-end pt-2">
               <Button onClick={handleCloseModal}>Cancelar</Button>
               <Button type="submit" color="primary">

@@ -23,26 +23,68 @@ if ($method === 'GET') {
     // y generar la respuesta deseada.
 	$data = [
 		"structure" => [
-			"name" => [
-				"alias" => "nombre"
-			],
-			"branch" => [
-				"alias" => "sucursal"
-			],
-			"company" => [
-				"alias" => "empresa"
-			]
-		],
+            "name" => [
+                "alias" => "nombre",
+                "type" => "string",
+                "required" => true
+            ],
+            "document" => [
+                "alias" => "documento",
+                "type" => "number",
+                "validation" => "number"
+            ],
+            "birth_day" => [
+                "alias" => "fecha nacimiento",
+                "type" => "date",
+                "required" => true
+            ],
+            "birth_hour" => [
+                "alias" => "hora nacimiento",
+                "type" => "time",
+                "required" => true
+            ],
+            "email" => [
+                "alias" => "correo",
+                "validation" => "email",
+                "required" => true
+            ],
+            "gender" => [
+                "alias" => "genero",
+                "type" => "select",
+                "options" => [
+                    ["label" => "Masculino", "value" => "male"],
+                    ["label" => "Femenino", "value" => "female"]
+                ]
+            ],
+            "system_access" => [
+                "alias" => "acceso al sistema",
+                "type" => "checkbox"
+            ],
+            "rol" => [
+                "alias" => "rol",
+                "type" => "radio",
+                "options" => [
+                    ["label" => "administrados", "value" => "admin"],
+                    ["label" => "visitante", "value" => "visitor"]
+                ]
+            ],
+            "active" => [
+                "alias" => "activo",
+                "type" => "switch"
+            ],
+        ],
 		"data" => [
 				[
-					'name' => 'bodega 1',
-					"branch" => "sucursal principal",
-					"company" => "empresa"
+					'name' => 'usuerio 1',
+					"document" => "123",
+					"email" => "correo@correo.co",
+					"gender" => "male"
 				],
 				[
-					'name' => 'bodega 2',
-					"branch" => "sucursal 2",
-					"company" => "empresa 2"
+					'name' => 'usuerio 2',
+					"document" => "456",
+					"email" => "correo2@correo.co",
+					"gender" => "female"
 				]
 			]
 	
