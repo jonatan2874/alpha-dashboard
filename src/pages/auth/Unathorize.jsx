@@ -1,14 +1,24 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
 // import { AuthContext } from '../../context/auth';
 import { AuthContext } from '../../context/auth';
+import { useNavigate } from "react-router-dom";
 
 const Unauthorize = () => {
   const {user,is_auth} = useContext(AuthContext);
   console.log(is_auth)
   // const { login } = useContext(AuthContext);
   // const [showPassword,setShowPassword] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  if(!is_auth){
+    navigate('/login');
+    // <Navigate to="/login" replace={true} />
+  }
+
+  useEffect(() => {
+    navigate('/login');
+  }, []); 
+
 
   // const onLogin = ()=>{
   //   login('jonatan');

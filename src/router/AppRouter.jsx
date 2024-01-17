@@ -5,6 +5,7 @@ import  routes from "./routes.json";
 import { AuthContext } from '../context/auth';
 
 import Unauthorize from '../pages/auth/Unathorize';
+import Loading from '../components/loading/Loading';
 
 let globalCounter = 0;
 
@@ -24,7 +25,9 @@ const RouteWithSubRoutes = ({ route}) => {
                           key={id}
                           path={route.path}
                           element={
-                                  <Suspense fallback={<div>Loading...</div>}>
+                                  <Suspense fallback={
+                                      <Loading/>
+                                  }>
                                     <Component  />
                                   </Suspense>
                                 }
