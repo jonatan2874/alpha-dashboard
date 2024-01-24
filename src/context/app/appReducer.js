@@ -24,6 +24,25 @@ export const appReducer = (state, action) => {
         },
       };
 
+    // ALERT
+    case types.alert.show:
+      return {
+        ...state,
+        alert: {
+          show: true,
+          content: payload.content
+        }
+      }
+
+    case types.alert.hide:
+      return {
+        ...state,
+        alert: {
+          ...alert,
+          show: false
+        }
+      }
+
     // Otras acciones (si es necesario)
 
     default:

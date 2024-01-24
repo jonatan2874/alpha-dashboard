@@ -4,60 +4,62 @@ import { authReducer } from "./authReducer";
 
 import { types } from "./types/types";
 
-const init = ()=>{
+const init = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     return {
         is_auth: !!user,
         user,
-        theme : 'dark'
+        theme: 'dark'
     }
 }
 
 const AuthProvider = ({ children }) => {
 
-    const [state,dispatch] = useReducer( authReducer, {}, init );
+    const [state, dispatch] = useReducer(authReducer, {}, init);
 
-    const login = (name = '') =>{
+    const login = (name = '') => {
         const user = {
-            id : 1,
-            name : name,
-            role : "admin",
-            permissions : [
-                            "documentation",
-                            "documentation/buttons",
-                            "/tickets",
-                            "/dashboards/analytics",
-                            "/dashboards/finance",
-                            "documentation/crud"
-                        ]
+            id: 1,
+            name: name,
+            role: "admin",
+            permissions: [
+                "documentation",
+                "documentation/buttons",
+                "/tickets",
+                "/dashboards/analytics",
+                "/dashboards/finance",
+                "documentation/crud",
+                "documentation/alerts",
+                "documentation/crud-demo",
+            ]
         }
 
         const action = {
-            type : types.login,
-            payload : {
+            type: types.login,
+            payload: {
                 user,
-                theme : 'dark'                
+                theme: 'dark'
             }
         }
 
-        localStorage.setItem('user',JSON.stringify(user))
+        localStorage.setItem('user', JSON.stringify(user))
 
         dispatch(action);
     }
 
-    const logout = ()=>{
+    const logout = () => {
         localStorage.removeItem('user');
         const action = {
-            type : types.logout,
+            type: types.logout,
         };
         dispatch(action);
 
     }
 
-    const changeTheme = ()=>{
+    const changeTheme = () => {
         const action = {
-            type : types.theme,
-            payload : {
+            type: types.theme,
+            payload: {
                 ...state
             }
         }
@@ -66,14 +68,14 @@ const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
-                //state
-                ...state,
+            //state
+            ...state,
 
-                //methods
-                login,
-                logout,
-                changeTheme
-            }}>
+            //methods
+            login,
+            logout,
+            changeTheme
+        }}>
             {children}
         </AuthContext.Provider>
     )
