@@ -60,6 +60,11 @@
                         "exact": true
                     },
                     {
+                        "path": "form-demo",
+                        "component": "../pages/documentation/components/demo/FormExample",
+                        "exact": true
+                    },
+                    {
                         "path": "crud-demo/equipos/:idEquipo",
                         "component": "../pages/documentation/components/demo/EquiposCrud",
                         "exact": true

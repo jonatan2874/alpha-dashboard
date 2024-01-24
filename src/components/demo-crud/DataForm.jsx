@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
-import { alert_status_description } from '../helpers/alertStatusDescription';
-import FormSkeleton from './ui/skeletons/FormSkeleton';
-import { AppContext } from '../context/app/AppContext';
-import { TwButton } from './ui/Button';
+import { alert_status_description } from '../../helpers/alertStatusDescription';
+import FormSkeleton from '../ui/skeletons/FormSkeleton';
+import { AppContext } from '../../context/app/AppContext';
+import { TwButton } from '../ui/Button';
 import FormFields from './FormFields';
-import { API_ENDPOINT } from '../helpers/API_ENDPOINT';
+import { API_ENDPOINT } from '../../helpers/API_ENDPOINT';
 
 const DataForm = ({ endpoint = "", label = "Data Form" }) => {
 
@@ -146,7 +146,7 @@ const DataForm = ({ endpoint = "", label = "Data Form" }) => {
                 {formFields}
 
                 <div className="pt-2">
-                  <TwButton label="Guardar" loading={apiLoader} type="submit" />
+                  <TwButton loading={apiLoader} type="submit">Guardar</TwButton>
                 </div>
               </form>
           }

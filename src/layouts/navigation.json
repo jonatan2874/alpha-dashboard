@@ -37,6 +37,13 @@
             "url": "documentation/crud-demo"
           },
           {
+            "id": "components-form-demo",
+            "title": "Form Demo",
+            "type": "item",
+            "icon": "HiOutlineClipboardList",
+            "url": "documentation/form-demo"
+          },
+          {
             "id": "components-alerts",
             "title": "Alert",
             "type": "item",
