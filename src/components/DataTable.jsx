@@ -30,7 +30,15 @@ const DataTable = ({ endpoint }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(endpoint);
+      const response = await axios.get(endpoint, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'http://localhost:5173', // Ajusta la URL
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
+          'Access-Control-Allow-Headers': '*'
+        },
+      });
       setData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
