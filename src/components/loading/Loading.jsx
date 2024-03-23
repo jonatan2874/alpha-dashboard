@@ -1,4 +1,3 @@
-import styles from './styles.css';
 
 const Loading = ()=>{
     return(

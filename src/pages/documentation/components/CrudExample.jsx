@@ -9,7 +9,7 @@ const CrudExample = () =>{
     return (
         <TwCard>
             <h1>Ejemplo crud</h1>
-            <DataTable endpoint="http://localhost:8000/api/configuracion-resolucion"/>
+            <DataTable endpoint="http://localhost/api/index.php"/>
         </TwCard>
     );
 }

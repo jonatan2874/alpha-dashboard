@@ -1,57 +1,56 @@
 import { useContext, lazy, Suspense, memo } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-import routes from "./routes.json";
+// import routes from "./routes.json";
 import { AuthContext } from '../context/auth';
+// import routeStack from './RouteStack';
+import ProtectedRoutes from './ProtectedRoutes';
 
 import Unauthorize from '../pages/auth/Unathorize';
 import Loading from '../components/loading/Loading';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import Login from '../pages/auth/Login';
+
+/* get routes stack */
+import RouteStack from './RouteStack';
+const routes = RouteStack();
 
 let globalCounter = 0;
 
-const loadComponent = (componentName) => {
-  const Component = lazy(() => import(/* @vite-ignore */ `${componentName}.jsx`));
-  return memo(Component);
-}
-
-const RouteWithSubRoutes = ({ route }) => {
+const GenerateRoutes = (route) => {
   const id = globalCounter++;
   if (!route || !route.component) {
     return null;
   }
-  const Component = loadComponent(route.component);
 
   const created_route = <Route
     key={id}
     path={route.path}
     element={
-      <Suspense fallback={
-        <Loading />
-      }>
-        <Component />
+      <Suspense fallback={<Loading />}>
+        {
+          route.private
+            ?
+            <ProtectedRoutes>
+              <route.component />
+            </ProtectedRoutes>
+            :
+            <route.component />
+        }
       </Suspense>
     }
   >
-    {route.routes && route.routes.map((subroute, i) => {
-      return RouteWithSubRoutes({ route: subroute })
-    })}
+    {
+      route.routes &&
+      route.routes.map((subroute) => {
+        return GenerateRoutes(subroute)
+      })
+    }
   </Route>
+  console.log(<route.component></route.component> )
   return created_route;
-}
-
-const PrivateRoute = (is_auth, permissions = ["login"], route) => {
-  const Component = !is_auth || permissions.includes(route.path) && route.path != '/' ?
-    <Route
-      key={new Date().getMilliseconds()}
-      path={route.path}
-      element={<Unauthorize />}
-    >
-    </Route> :
-    RouteWithSubRoutes({ route })
-  return Component;
 }
 /**
  * las rutas se validaran en permisos solo si son privadas, una ruta puede ser privada pero sin permiso, por ejemplo
@@ -78,24 +77,19 @@ const AppRouter = () => {
       mode: 'light',
     },
   });
-
   return (
     <div className={theme == 'dark' ? 'theme-dark' : 'theme-light'}>
-      <BrowserRouter >
+      <BrowserRouter>
         <ThemeProvider theme={theme == 'dark' ? darkTheme : lightTheme}>
           <CssBaseline>
             <Routes>
-              {routes.map((route, i) => (
-                route.private ?
-                  PrivateRoute(is_auth, permissions, route) :
-                  RouteWithSubRoutes({ route })
-              ))}
+               {routes.map((route) => (GenerateRoutes(route)))}
             </Routes>
           </CssBaseline>
         </ThemeProvider>
-      </BrowserRouter >
+      </BrowserRouter>
     </div>
-  )
+  );
 }
 
 export default AppRouter

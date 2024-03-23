@@ -2,7 +2,7 @@
 [
     {
         "path"     : "/login",
-        "component": "../pages/auth/Login",
+        "component": "../pages/auth/Login.jsx",
         "private"  : false,
         "exact"    : true
     },
