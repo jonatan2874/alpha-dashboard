@@ -21,7 +21,7 @@ const init = () => {
 const AppProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(appReducer, {}, init);
-    // console.log(right_bar)
+    // console.log(state)
     // right methods
     const right_bar_methods = {};
     const alert_methods = {};

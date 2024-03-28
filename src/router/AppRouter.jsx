@@ -49,7 +49,7 @@ const GenerateRoutes = (route) => {
       })
     }
   </Route>
-  console.log(<route.component></route.component> )
+  // console.log(<route.component></route.component> )
   return created_route;
 }
 /**

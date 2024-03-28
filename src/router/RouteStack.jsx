@@ -9,6 +9,12 @@ const Error404 = lazy(() => import('../pages/Error404'));
 const Profile = lazy(() => import('../pages/admin/Profile'));
 const Tickets = lazy(() => import('../pages/admin/Tickets'));
 const Documentation = lazy(() => import('../pages/documentation/Documentation'));
+const ButtonDoc = lazy(() => import('../pages/documentation/components/ButtonDoc'));
+const CrudExample = lazy(() => import('../pages/documentation/components/CrudExample'));
+const DemoCrudExample = lazy(() => import('../pages/documentation/components/demo/CrudExample'));
+const FormExample = lazy(() => import('../pages/documentation/components/demo/FormExample'));
+const EquiposCrud = lazy(() => import('../pages/documentation/components/demo/EquiposCrud'));
+const AlertDoc = lazy(() => import('../pages/documentation/components/AlertDoc'));
 
 
 // Mapa de rutas y componentes
@@ -59,32 +65,32 @@ const stack = [
                             "routes" : [
                                 {
                                     "path": "buttons",
-                                    "component": "../pages/documentation/components/ButtonDoc",
+                                    "component": ButtonDoc,
                                     "exact": true
                                 },
                                 {
                                     "path": "crud",
-                                    "component": "../pages/documentation/components/CrudExample",
+                                    "component": CrudExample,
                                     "exact": true
                                 },
                                 {
                                     "path": "crud-demo",
-                                    "component": "../pages/documentation/components/demo/CrudExample",
+                                    "component": DemoCrudExample,
                                     "exact": true
                                 },
                                 {
                                     "path": "form-demo",
-                                    "component": "../pages/documentation/components/demo/FormExample",
+                                    "component": FormExample,
                                     "exact": true
                                 },
                                 {
                                     "path": "crud-demo/equipos/:idEquipo",
-                                    "component": "../pages/documentation/components/demo/EquiposCrud",
+                                    "component": EquiposCrud,
                                     "exact": true
                                 },
                                 {
                                     "path": "alerts",
-                                    "component": "../pages/documentation/components/AlertDoc",
+                                    "component": AlertDoc,
                                     "exact": true
                                 }
                             ]

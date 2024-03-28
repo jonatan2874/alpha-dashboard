@@ -12,7 +12,7 @@ const RightBar = () => {
   return (
     <>
       <div 
-        className={`xl:h-[100uv] fixed top-0 right-0 h-full w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto xl:min-w-[20%] bg-secondary-100 p-4 ${right_bar.show ? "right-0" : "-right-full "} transition-all`}
+        className={`xl:h-[100uv] fixed top-0 right-0 h-full w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto xl:min-w-[20%] bg-secondary-100 p-4 ${right_bar.show ? "right-0" : "translate-x-full"} transition-all`}
       >
         <MdClose className='cursor-pointer text-secondary-50' onClick={show} />
         <>
