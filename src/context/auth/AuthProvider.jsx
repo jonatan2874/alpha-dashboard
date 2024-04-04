@@ -31,7 +31,8 @@ const AuthProvider = ({ children }) => {
                 "documentation/crud",
                 "documentation/alerts",
                 "documentation/crud-demo",
-                "documentation/form-demo"
+                "documentation/form-demo",
+                "documentation/right-bar",
             ]
         }
 

@@ -7,11 +7,9 @@ import { AuthContext } from '../context/auth';
 // import routeStack from './RouteStack';
 import ProtectedRoutes from './ProtectedRoutes';
 
-import Unauthorize from '../pages/auth/Unathorize';
 import Loading from '../components/loading/Loading';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import Login from '../pages/auth/Login';
 
 /* get routes stack */
 import RouteStack from './RouteStack';

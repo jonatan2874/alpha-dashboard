@@ -9,6 +9,8 @@ const RightBar = () => {
     right_bar_methods.show();
   };
 
+  
+
   return (
     <>
       <div 

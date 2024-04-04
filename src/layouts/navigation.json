@@ -49,6 +49,13 @@
             "type": "item",
             "icon": "HiBellAlert",
             "url": "documentation/alerts"
+          },
+          {
+            "id": "components-right-bar",
+            "title": "Right Bar",
+            "type": "item",
+            "icon": "HiOutlineLogin",
+            "url": "documentation/right-bar"
           }
         ]
       }

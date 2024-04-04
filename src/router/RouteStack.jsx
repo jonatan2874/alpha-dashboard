@@ -15,7 +15,7 @@ const DemoCrudExample = lazy(() => import('../pages/documentation/components/dem
 const FormExample = lazy(() => import('../pages/documentation/components/demo/FormExample'));
 const EquiposCrud = lazy(() => import('../pages/documentation/components/demo/EquiposCrud'));
 const AlertDoc = lazy(() => import('../pages/documentation/components/AlertDoc'));
-
+const RightBar = lazy(() => import('../pages/documentation/components/RightBar'));
 
 // Mapa de rutas y componentes
 const stack = [
@@ -92,26 +92,19 @@ const stack = [
                                     "path": "alerts",
                                     "component": AlertDoc,
                                     "exact": true
-                                }
+                                },
+                                {
+                                    "path": "right-bar",
+                                    "component": RightBar,
+                                    "exact": true
+                                },
                             ]
                         }
                     ]
                 }
                 
 ];
-// const stack = [
-//   {
-//     "path"     : "/*",
-//     "component": Login,
-//     "is_private": false,
-//     "exact": true
-//   }
-// //     { path: '/', component: Home },
 
-// //   { path: '/about', component: About },
-// //   { path: '/contact', component: Contact },
-//   // Agrega más rutas y componentes según sea necesario
-// ];
 
 const RouteStack = ()=>{
   return stack;
