@@ -16,6 +16,7 @@ const FormExample = lazy(() => import('../pages/documentation/components/demo/Fo
 const EquiposCrud = lazy(() => import('../pages/documentation/components/demo/EquiposCrud'));
 const AlertDoc = lazy(() => import('../pages/documentation/components/AlertDoc'));
 const RightBar = lazy(() => import('../pages/documentation/components/RightBar'));
+const Crudv2 = lazy(() => import('../pages/documentation/components/Crudv2'));
 
 // Mapa de rutas y componentes
 const stack = [
@@ -96,6 +97,11 @@ const stack = [
                                 {
                                     "path": "right-bar",
                                     "component": RightBar,
+                                    "exact": true
+                                },
+                                {
+                                    "path": "crudv2",
+                                    "component": Crudv2,
                                     "exact": true
                                 },
                             ]

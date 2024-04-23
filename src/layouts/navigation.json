@@ -56,6 +56,13 @@
             "type": "item",
             "icon": "HiOutlineLogin",
             "url": "documentation/right-bar"
+          },
+          {
+            "id": "components-crudv2",
+            "title": "Crud v2",
+            "type": "item",
+            "icon": "HiOutlineLogin",
+            "url": "documentation/crudv2"
           }
         ]
       }

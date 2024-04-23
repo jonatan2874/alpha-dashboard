@@ -7,10 +7,11 @@ import Collapse from './Collapse';
 const SubMenu = ({ item, icons,setShowMenu }) => {
     const { user } = useContext(AuthContext);
     const { permissions = [] } = user || [];
-
+    
     if (!item || !item.type) {
         return null;
     }
+    
 
     switch (item.type) {
         case "group":

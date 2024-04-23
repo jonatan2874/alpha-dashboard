@@ -33,6 +33,7 @@ const AuthProvider = ({ children }) => {
                 "documentation/crud-demo",
                 "documentation/form-demo",
                 "documentation/right-bar",
+                "documentation/crudv2",
             ]
         }
 

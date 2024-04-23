@@ -30,9 +30,12 @@ const LeftBar = () => {
                         </div>
                     </div>
                     <ul>
-                        {items.map(item => (
-                            <SubMenu key={item.id} item={item} icons={icons} setShowMenu={setShowMenu}/>
-                        ))}
+                        {items.map(item => {
+                            // console.log(item)
+                            return (
+                                <SubMenu key={item.id} item={item} icons={icons} setShowMenu={setShowMenu}/>
+                            )
+                        })}
                     </ul>
                 </div>
             </div>

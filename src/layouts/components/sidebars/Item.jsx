@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Item = ({ item, icons, setShowMenu }) => {
     const location = useLocation();
-
+    // console.log(item)
     const isActive = (url) => {
     const normalizedUrl = url.startsWith('/') ? url : `/${url}`;
         return location.pathname === normalizedUrl;
