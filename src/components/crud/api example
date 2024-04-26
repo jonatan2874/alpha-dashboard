@@ -1,0 +1,62 @@
+<?php
+
+// Permitir solicitudes desde cualquier origen
+header("Access-Control-Allow-Origin: *");
+
+// Permitir métodos de solicitud GET y POST
+header("Access-Control-Allow-Methods: GET, POST");
+
+// Configurar el tipo de contenido de la respuesta como JSON
+header("Content-Type: application/json");
+
+// Conexión a la base de datos
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "api";
+
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Parámetros de solicitud
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$search = isset($_GET['search']) ? $_GET['search'] : "";
+// Calcular el offset
+$offset = ($page - 1) * $limit;
+
+// Agregar cláusula WHERE si se proporciona un parámetro de búsqueda
+if (!empty($search)) {
+    $where .= " WHERE nombre LIKE '%$search%' OR apellido LIKE '%$search%' OR correo LIKE '%$search%'";
+}
+
+// Consulta SQL para obtener registros con paginación y límite
+echo $sql = "SELECT * FROM usuarios $where LIMIT $limit OFFSET $offset";
+$result = $conn->query($sql);
+
+// Array para almacenar los resultados
+$usuarios = array();
+
+// Verificar si hay resultados
+if ($result->num_rows > 0) {
+    // Recorrer cada fila de resultados
+    while ($row = $result->fetch_assoc()) {
+        // Agregar cada fila al array de usuarios
+        $usuarios[] = $row;
+    }
+} else {
+    echo "No se encontraron resultados.";
+}
+
+// Cerrar conexión
+$conn->close();
+
+// Devolver los datos en formato JSON
+echo json_encode($usuarios);
+
+?>

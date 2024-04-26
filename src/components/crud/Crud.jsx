@@ -1,8 +1,8 @@
 import DataTable from "./DataTable";
 
-export default function Crud() {
+export default function Crud({columns}) {
 
   return (
-    <><DataTable/></>
+    <><DataTable columns={columns}/></>
   );
 }
