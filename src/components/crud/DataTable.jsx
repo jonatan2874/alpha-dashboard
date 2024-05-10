@@ -9,42 +9,46 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import { HiDocumentAdd } from "react-icons/hi";
+import { HiDocumentAdd,HiPencil,HiXCircle   } from "react-icons/hi";
 
 
 
 
-export default function DataTable({columns}) {
+export default function DataTable({columns,endpoint,form_setOpen}) {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
-  console.log(columns)
+  const [isLazyLoading, setIsLazyLoading] = useState(false);
+
+
+  // console.log(columns)
   const fetchData = async (page,searchTerm) => {
+    setIsLazyLoading(true)
     try {
-      const response = await axios.get(`http://localhost/api/index.php?limit=100&page=${page}${searchTerm ? `&search=${searchTerm}` : `` }`);
+      const response = await axios.get(`${endpoint}?limit=100&page=${page}${searchTerm ? `&search=${searchTerm}` : `` }`);
       if (page === 1) {
         setData(response.data); // Reemplazar datos en la primera página
       } else {
         setData(prevData => [...prevData, ...response.data]); // Concatenar nuevos datos en páginas subsiguientes
       }
-      console.log(response.data.length);
+      // console.log(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+    setIsLazyLoading(false)
   };
 
   const handleScroll = (event) => {
     const table = event.target;
     if (table.scrollHeight - table.scrollTop === table.clientHeight) {
-      // Llama a tu función cuando se desplaza hasta el final de la tabla
-      console.log('Llegaste al final de la tabla');
       setPage(prevPage => prevPage + 1)
     }
   };
 
   const handleSearchChange = (event) => {
+    setIsLazyLoading(true)
+    setData([])
     const { value } = event.target;
     setSearchTerm(value);
     clearTimeout(searchTimeout);
@@ -59,9 +63,9 @@ export default function DataTable({columns}) {
   }, [page]);
 
   return (
-          <div  className='max-h-full'>
-            <div className='flex justify-between items-center'>
-              <Button variant="filled" startIcon={<HiDocumentAdd />}>
+          <div className='h-full'>
+            <div className='flex justify-between items-center h-16'>
+              <Button variant="filled" onClick={()=>form_setOpen(true)} startIcon={<HiDocumentAdd />}>
                 Agregar
               </Button>
 
@@ -73,37 +77,50 @@ export default function DataTable({columns}) {
                 onChange={handleSearchChange}
               />
             </div>
-            {/* <TableContainer component={Paper} onScroll={handleScroll}  className='h-full'> */}
-              
-              <Table stickyHeader >
-                <TableHead >
-                  <TableRow>
-                      { Object.keys(columns).map(element => (
-                        <TableCell key={element}>{element}</TableCell>
-                      ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.length == 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={Object.keys(columns).length} align="center">
-                            Sin registros
-                          </TableCell>
+              <TableContainer component={Paper} onScroll={handleScroll} sx={{ overflowY: 'auto', height: 'calc(100% - 4rem)' }} >
+                <Table stickyHeader >
+                  <TableHead >
+                    <TableRow>
+                        { Object.keys(columns).map(element => (
+                          <TableCell key={element}>{element}</TableCell>
+                        ))}
+                          <TableCell key="edit"></TableCell>
+                          <TableCell key="delete"></TableCell>
+
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {Array.isArray(data) &&  data.map((row, rowIndex) => (
+                        <TableRow key={rowIndex} hover >
+                          { Object.keys(columns).map(element => (
+                            <TableCell key={element}>{row[element]}</TableCell>
+                          ))}
+                            <TableCell key={rowIndex+1}>
+                              <HiPencil title="Editar" className='text-xl cursor-pointer'/>
+                            </TableCell>
+                            <TableCell key={rowIndex+2}>
+                              <HiXCircle title='Eliminar' className='text-xl cursor-pointer'/>
+                            </TableCell>
+
                         </TableRow>
-                      ) : (
-                        data.map((row, rowIndex) => (
-                          <TableRow key={rowIndex}>
-                            {Object.values(row).map((cell, cellIndex) => (
-                              <TableCell key={cellIndex}>{cell}</TableCell>
-                            ))}
-                          </TableRow>
-                        ))
-                      )
-                  }
-                </TableBody>
-              </Table>
-            {/* </TableContainer> */}
-          </div>
+                      ))}    
+                    {isLazyLoading ? (
+                      <TableRow>
+                        <TableCell colSpan={Object.keys(columns).length+2} align="center">
+                          <div className='flex items-center justify-center'>
+                            cargando 
+                            <div className="animate-bounce w-6 text-5xl">.</div>
+                            <div className="animate-bounce w-6 text-5xl" style={{ animationDelay: '0.2s' }}>.</div>
+                            <div className="animate-bounce w-6 text-5xl"  style={{ animationDelay: '0.4s' }}>.</div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      ) : null
+                    }
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
       )
   
 }
