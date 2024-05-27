@@ -42,6 +42,13 @@ const Crudv2 = () => {
         email: {
             alias: "Correo",
             validation: "email",
+            rules: {
+                required: "correo requerido",
+                pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "El e-mail no es valido",
+                },
+            },
         },
         gender: {
             alias: "Genero",
@@ -75,7 +82,7 @@ const Crudv2 = () => {
             <Crud 
                 columns={columns} 
                 form_fields={form_fields}
-                endpoint='http://localhost/api/index.php' 
+                endpoint='http://localhost:8000/api/v1/enterprises/' 
             />
         </>
     )

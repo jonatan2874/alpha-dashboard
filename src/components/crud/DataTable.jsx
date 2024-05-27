@@ -58,10 +58,11 @@ export default function DataTable({columns,endpoint,form_setOpen}) {
     setSearchTimeout(timeout);
   };
   
+  // console.log("Ejecutado");
   useEffect(() => {
     fetchData(page); // Llamar a fetchData cuando cambie el número de página
   }, [page]);
-
+  
   return (
           <div className='h-full'>
             <div className='flex justify-between items-center h-16'>
